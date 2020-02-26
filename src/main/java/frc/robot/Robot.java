@@ -8,7 +8,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
@@ -29,19 +28,23 @@ public class Robot extends TimedRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
+
+
+   
+
+   SpeedController m_frontLeft = new Spark(2);
+   SpeedController m_rearLeft = new Spark(1);
+   SpeedControllerGroup m_left = new SpeedControllerGroup(m_frontLeft, m_rearLeft);
+
+   SpeedController m_frontRight = new Spark(3);
+   SpeedController m_rearRight = new Spark(0);
+   SpeedControllerGroup m_right = new SpeedControllerGroup(m_frontRight, m_rearRight);
+
+  DifferentialDrive m_drive = new DifferentialDrive(m_left, m_right);
+
+  Joystick controller = new Joystick(0);
   
-  private SpeedController frontLeftMotor;
-  private SpeedController frontRightMotor;
-  private SpeedController rearLeftMotor;
-  private SpeedController rearRightMotor;
-  private SpeedController sideDrive;
-
-  private SpeedControllerGroup leftSideGroup;
-  private SpeedControllerGroup rightSideGroup;
-  private Joystick driverJoystick;
-  private DifferentialDrive m_drive;
-  private Servo servo;
-
+  
 
 
 
@@ -59,19 +62,11 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
 
-    frontLeftMotor = new Spark(0);
-    rearLeftMotor = new Spark(1);
-    frontRightMotor = new Spark(2);
-    rearRightMotor = new Spark(3);
-    sideDrive = new Spark(4);
-
-    leftSideGroup = new SpeedControllerGroup(frontLeftMotor, rearLeftMotor);
-    rightSideGroup = new SpeedControllerGroup(frontRightMotor, rearRightMotor);
-    driverJoystick = new Joystick(0);
     
-    servo = new Servo(9);
+  
+    
 
-    //m_drive = new DifferentialDrive(leftSideGroup, rightSideGroup);
+    
   }
 
   /**
@@ -101,7 +96,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autoSelected = m_chooser.getSelected();
-    // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
+   m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
   }
 
@@ -127,18 +122,15 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
-    m_drive = new DifferentialDrive(leftSideGroup, rightSideGroup);
-    m_drive.arcadeDrive(driverJoystick.getX(), driverJoystick.getZ());
+    m_drive.arcadeDrive( controller.getY() *-1, controller.getX());
 
-    boolean hiSpeed = driverJoystick.getRawButtonPressed(1);
-    if(hiSpeed){
-      servo.set(0.5);
-    }
-    else{
-      servo.set(0);
+   
+  
+   
+   
     }
 
-  }
+  
 
   /**
    * This function is called periodically during test mode.
@@ -159,4 +151,10 @@ public class Robot extends TimedRobot {
 //TODO: Sidedrive
 
 //TODO: Pnumatics for raising and lowering sidedrive
+
+
+//  m_frontLeft = 2
+//  m_frontRight = 3
+//  m_rearLeft = 1
+//  m_rearRight = 0
 
