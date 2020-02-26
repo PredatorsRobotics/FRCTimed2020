@@ -8,6 +8,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
@@ -43,6 +44,9 @@ public class Robot extends TimedRobot {
   DifferentialDrive m_drive = new DifferentialDrive(m_left, m_right);
 
   Joystick controller = new Joystick(0);
+
+  Servo gearshift = new Servo(9);
+
   
   
 
@@ -62,10 +66,7 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
 
-    
-  
-    
-
+    gearshift.set(.25);
     
   }
 
@@ -124,9 +125,15 @@ public class Robot extends TimedRobot {
 
     m_drive.arcadeDrive( controller.getY() *-1, controller.getX());
 
-   
-  
-   
+    if(controller.getRawButtonPressed(1)){
+      gearshift.set(0.5);
+    }
+
+    if(controller.getRawButtonPressed(2)){
+      gearshift.set(.75);
+    }
+
+    System.out.println(gearshift.get());
    
     }
 
