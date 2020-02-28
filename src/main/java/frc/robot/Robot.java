@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -46,6 +47,8 @@ public class Robot extends TimedRobot {
   Joystick controller = new Joystick(0);
 
   Servo gearshift = new Servo(9);
+
+  VictorSP sideDrive = new VictorSP(4);
 
   
   
@@ -133,8 +136,15 @@ public class Robot extends TimedRobot {
       gearshift.set(.75);
     }
 
-    System.out.println(gearshift.get());
-   
+    if(controller.getRawButton(5)){
+        sideDrive.setSpeed(.35);
+      } else if(controller.getRawButton(6)){
+        sideDrive.set(-.35);
+      } else{
+        sideDrive.set(0);
+      }
+
+    
     }
 
   
@@ -147,16 +157,9 @@ public class Robot extends TimedRobot {
   }
 }
 
-
-//TODO: Servo System
-//Be able to set between 2 locations based on button input or speed sensing 
-
-//TODO: Gyro
-
-//TODO: Autonomous
-
 //TODO: Sidedrive
-
+//TODO: Gyro
+//TODO: Autonomous
 //TODO: Pnumatics for raising and lowering sidedrive
 
 
