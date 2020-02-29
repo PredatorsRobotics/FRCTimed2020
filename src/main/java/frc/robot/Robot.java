@@ -58,15 +58,6 @@ public class Robot extends TimedRobot {
 
   Encoder liftMotorEncoder = new Encoder(0,1);
 
-  
-  
-
-
-
-  
-
-
-
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
@@ -189,5 +180,5 @@ public class Robot extends TimedRobot {
 //  m_frontRight = 3
 //  m_rearLeft = 1
 //  m_rearRight = 0
-// Button 7 = go up
+
 
