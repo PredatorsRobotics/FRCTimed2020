@@ -50,6 +50,11 @@ public class Robot extends TimedRobot {
 
   VictorSP sideDrive = new VictorSP(4);
 
+  VictorSP liftMotor1 = new VictorSP(6);
+  VictorSP liftMotor2 = new VictorSP(7);
+
+  SpeedControllerGroup liftMotors = new SpeedControllerGroup(liftMotor1, liftMotor2);
+
   
   
 
@@ -144,6 +149,12 @@ public class Robot extends TimedRobot {
         sideDrive.set(0);
       }
 
+      if(controller.getRawButton(7)){
+        liftMotors.set(.25);
+      }else{
+        liftMotors.set(0);
+      }
+
     
     }
 
@@ -157,14 +168,17 @@ public class Robot extends TimedRobot {
   }
 }
 
-//TODO: Sidedrive
+
 //TODO: Gyro
 //TODO: Autonomous
 //TODO: Pnumatics for raising and lowering sidedrive
+//TODO: Gearbox with encoders
+
 
 
 //  m_frontLeft = 2
 //  m_frontRight = 3
 //  m_rearLeft = 1
 //  m_rearRight = 0
+// Button 7 = go up
 
