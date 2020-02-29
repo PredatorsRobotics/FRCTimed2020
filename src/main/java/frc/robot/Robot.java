@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Spark;
@@ -50,10 +51,12 @@ public class Robot extends TimedRobot {
 
   VictorSP sideDrive = new VictorSP(4);
 
-  VictorSP liftMotor1 = new VictorSP(6);
-  VictorSP liftMotor2 = new VictorSP(7);
+  SpeedController liftMotor1 = new VictorSP(5);
+  SpeedController liftMotor2 = new VictorSP(6);
 
   SpeedControllerGroup liftMotors = new SpeedControllerGroup(liftMotor1, liftMotor2);
+
+  Encoder liftMotorEncoder = new Encoder(0,1);
 
   
   
@@ -74,8 +77,9 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
 
-    gearshift.set(.25);
-    
+    gearshift.set(.1);
+    liftMotorEncoder.setDistancePerPulse(Math.PI*360);
+    liftMotorEncoder.reset();
   }
 
   /**
@@ -88,7 +92,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-   
+    System.out.println(liftMotorEncoder.getRaw());
   }
 
   /**
@@ -134,13 +138,14 @@ public class Robot extends TimedRobot {
     m_drive.arcadeDrive( controller.getY() *-1, controller.getX());
 
     if(controller.getRawButtonPressed(1)){
-      gearshift.set(0.5);
+      gearshift.set(.7);
     }
 
     if(controller.getRawButtonPressed(2)){
-      gearshift.set(.75);
+      gearshift.set(.3);
     }
 
+    //Side Drive System
     if(controller.getRawButton(5)){
         sideDrive.setSpeed(.35);
       } else if(controller.getRawButton(6)){
@@ -149,9 +154,13 @@ public class Robot extends TimedRobot {
         sideDrive.set(0);
       }
 
+      // Climbing Motors set
       if(controller.getRawButton(7)){
-        liftMotors.set(.25);
-      }else{
+        liftMotors.set(.5);
+      }else if (controller.getRawButton(8)){
+        liftMotors.set(-.5);
+      }
+      else{
         liftMotors.set(0);
       }
 
