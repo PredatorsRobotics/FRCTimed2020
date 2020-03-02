@@ -56,7 +56,9 @@ public class Robot extends TimedRobot {
 
   SpeedControllerGroup liftMotors = new SpeedControllerGroup(liftMotor1, liftMotor2);
 
-  Encoder liftMotorEncoder = new Encoder(0,1);
+  private Encoder liftMotorEncoder = new Encoder(0, 1);
+
+  double encoderValue;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -69,8 +71,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Auto choices", m_chooser);
 
     gearshift.set(.1);
-    liftMotorEncoder.setDistancePerPulse(Math.PI*360);
-    liftMotorEncoder.reset();
+   // liftMotorEncoder.reset();
+    
   }
 
   /**
@@ -83,7 +85,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    System.out.println(liftMotorEncoder.getRaw());
+    
+   double encoderValue = liftMotorEncoder.getDistance();
+    
   }
 
   /**
@@ -146,9 +150,9 @@ public class Robot extends TimedRobot {
       }
 
       // Climbing Motors set
-      if(controller.getRawButton(7)){
+      if(controller.getRawButton(7) && encoderValue < 15000){
         liftMotors.set(.5);
-      }else if (controller.getRawButton(8)){
+      }else if (controller.getRawButton(8) && encoderValue > 1000){
         liftMotors.set(-.5);
       }
       else{
