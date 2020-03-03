@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Servo;
@@ -60,6 +61,10 @@ public class Robot extends TimedRobot {
 
   double encoderValue;
 
+  private ADXRS450_Gyro spigyro = new ADXRS450_Gyro();
+
+  
+
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
@@ -68,11 +73,10 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
-    SmartDashboard.putData("Auto choices", m_chooser);
+    //SmartDashboard.putData("Auto choices", m_chooser);
 
     gearshift.set(.1);
-   // liftMotorEncoder.reset();
-    
+    liftMotorEncoder.reset();
   }
 
   /**
@@ -87,6 +91,10 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     
    double encoderValue = liftMotorEncoder.getDistance();
+   double gyroValue = spigyro.getAngle();
+
+   SmartDashboard.putNumber("Heading: ", gyroValue);
+   SmartDashboard.putNumber("Encoder: ", encoderValue);
     
   }
 
@@ -150,14 +158,15 @@ public class Robot extends TimedRobot {
       }
 
       // Climbing Motors set
-      if(controller.getRawButton(7) && encoderValue < 15000){
-        liftMotors.set(.5);
-      }else if (controller.getRawButton(8) && encoderValue > 1000){
-        liftMotors.set(-.5);
-      }
-      else{
+      if(controller.getRawButton(7)){
+        liftMotors.set(.75);
+      } else if (controller.getRawButton(8)){
+        liftMotors.set(-.75);
+      } else{
         liftMotors.set(0);
       }
+
+      
 
     
     }
@@ -176,7 +185,6 @@ public class Robot extends TimedRobot {
 //TODO: Gyro
 //TODO: Autonomous
 //TODO: Pnumatics for raising and lowering sidedrive
-//TODO: Gearbox with encoders
 
 
 
