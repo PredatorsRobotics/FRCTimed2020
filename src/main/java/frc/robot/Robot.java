@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.VictorSP;
-import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -61,6 +60,7 @@ public class Robot extends TimedRobot {
   private Encoder liftMotorEncoder = new Encoder(0, 1);
 
   double encoderValue;
+  double gyroValue;
 
  private ADXRS450_Gyro gyro = new ADXRS450_Gyro();
   
@@ -92,11 +92,11 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     
    double encoderValue = liftMotorEncoder.getDistance();
-   double gyroValue = gyro.getAngle();
 
-   SmartDashboard.putNumber("Heading: ", gyroValue);
+  //  SmartDashboard.putNumber("Heading: ", gyro.getAngle());
    SmartDashboard.putNumber("Encoder: ", encoderValue);
-    
+
+  System.out.println(gyro.getAngle()*60);
   }
 
   /**
