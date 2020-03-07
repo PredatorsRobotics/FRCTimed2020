@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -45,24 +46,18 @@ public class Robot extends TimedRobot {
    SpeedControllerGroup m_right = new SpeedControllerGroup(m_frontRight, m_rearRight);
 
   DifferentialDrive m_drive = new DifferentialDrive(m_left, m_right);
+Joystick controller = new Joystick(0);
+Servo gearshift = new Servo(9);
+VictorSP sideDrive = new VictorSP(4);
+SpeedController liftMotor1 = new VictorSP(5);
+SpeedController liftMotor2 = new VictorSP(6);
+SpeedControllerGroup liftMotors = new SpeedControllerGroup(liftMotor1, liftMotor2);
+private Encoder liftMotorEncoder = new Encoder(0, 1);
+double encoderValue;
+double gyroValue;
+private ADXRS450_Gyro gyro = new ADXRS450_Gyro();
 
-  Joystick controller = new Joystick(0);
 
-  Servo gearshift = new Servo(9);
-
-  VictorSP sideDrive = new VictorSP(4);
-
-  SpeedController liftMotor1 = new VictorSP(5);
-  SpeedController liftMotor2 = new VictorSP(6);
-
-  SpeedControllerGroup liftMotors = new SpeedControllerGroup(liftMotor1, liftMotor2);
-
-  private Encoder liftMotorEncoder = new Encoder(0, 1);
-
-  double encoderValue;
-  double gyroValue;
-
- private ADXRS450_Gyro gyro = new ADXRS450_Gyro();
   
 
   /**
@@ -78,6 +73,7 @@ public class Robot extends TimedRobot {
     gearshift.set(.1);
     liftMotorEncoder.reset();
     gyro.calibrate();
+    
   }
 
   /**
@@ -93,10 +89,13 @@ public class Robot extends TimedRobot {
     
    double encoderValue = liftMotorEncoder.getDistance();
 
-  //  SmartDashboard.putNumber("Heading: ", gyro.getAngle());
+   SmartDashboard.putNumber("Heading: ", gyro.getAngle()*360);
    SmartDashboard.putNumber("Encoder: ", encoderValue);
 
-  System.out.println(gyro.getAngle()*60);
+   if(controller.getRawButton(10)){
+     gyro.reset();
+   }
+
   }
 
   /**
@@ -159,13 +158,14 @@ public class Robot extends TimedRobot {
       }
 
       // Climbing Motors set
-      if(controller.getRawButton(7)){
+      if(controller.getRawButton(7) && encoderValue < 1000){
         liftMotors.set(.75);
-      } else if (controller.getRawButton(8)){
+      } else if (controller.getRawButton(8) && encoderValue > 300){
         liftMotors.set(-.75);
       } else{
         liftMotors.set(0);
       }
+      
 
       
 
@@ -186,12 +186,3 @@ public class Robot extends TimedRobot {
 //TODO: Gyro
 //TODO: Autonomous
 //TODO: Pnumatics for raising and lowering sidedrive
-
-
-
-//  m_frontLeft = 2
-//  m_frontRight = 3
-//  m_rearLeft = 1
-//  m_rearRight = 0
-
-
