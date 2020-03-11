@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -94,6 +93,8 @@ ADIS16470_IMU gyro = new ADIS16470_IMU();
 
    SmartDashboard.putNumber("Heading: ", gyro.getAngle());
    SmartDashboard.putNumber("Encoder: ", encoderValue);
+   SmartDashboard.putNumber("ROC", gyro.getRate());
+   SmartDashboard.putNumber("Instant X? ", gyro.getGyroInstantX());
 
    if(controller.getRawButton(10)){
      gyro.reset();     
