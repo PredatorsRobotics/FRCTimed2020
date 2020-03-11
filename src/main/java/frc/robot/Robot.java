@@ -7,7 +7,8 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import com.analog.adis16470.frc.ADIS16470_IMU;
+
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Servo;
@@ -17,6 +18,7 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -55,10 +57,11 @@ SpeedControllerGroup liftMotors = new SpeedControllerGroup(liftMotor1, liftMotor
 private Encoder liftMotorEncoder = new Encoder(0, 1);
 double encoderValue;
 double gyroValue;
-private ADXRS450_Gyro gyro = new ADXRS450_Gyro();
 
 
-  
+ADIS16470_IMU gyro = new ADIS16470_IMU();
+
+
 
   /**
    * This function is run when the robot is first started up and should be
@@ -68,12 +71,12 @@ private ADXRS450_Gyro gyro = new ADXRS450_Gyro();
   public void robotInit() {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
-    //SmartDashboard.putData("Auto choices", m_chooser);
+    SmartDashboard.putData("Auto choices", m_chooser);
 
     gearshift.set(.1);
     liftMotorEncoder.reset();
     gyro.calibrate();
-    
+   
   }
 
   /**
@@ -89,11 +92,11 @@ private ADXRS450_Gyro gyro = new ADXRS450_Gyro();
     
    double encoderValue = liftMotorEncoder.getDistance();
 
-   SmartDashboard.putNumber("Heading: ", gyro.getAngle()*360);
+   SmartDashboard.putNumber("Heading: ", gyro.getAngle());
    SmartDashboard.putNumber("Encoder: ", encoderValue);
 
    if(controller.getRawButton(10)){
-     gyro.reset();
+     gyro.reset();     
    }
 
   }
